@@ -72,7 +72,7 @@ procedure Crosstooler is
    Base_Directory      : constant String := Ada.Directories.Current_Directory;
    Toolchain_Directory : constant String :=
      Base_Directory & "/" & Crosstooler_Directory & "/toolchain/" &
-     Architecture;
+     Gnat_Package_Name;
    Sysroot_Directory   : constant String :=
      Base_Directory & "/" & Crosstooler_Directory & "/sys-root/" &
      Architecture;
