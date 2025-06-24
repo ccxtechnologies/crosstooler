@@ -396,7 +396,7 @@ procedure Crosstooler is
       Log.Info ("Creating Gnat Package: " & Gnat_Package_Name);
       Shell_Commands.Execute
         ("tar --directory " & Toolchain_Directory & "/.. " & "-czf " &
-         Gnat_Package_Name & ".tar.gz " & Architecture);
+         Gnat_Package_Name & ".tar.gz " & Gnat_Package_Name);
    end Create_Gnat_Package;
 
 begin
