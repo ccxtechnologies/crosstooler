@@ -293,7 +293,7 @@ procedure Crosstooler is
             "--disable-libquadmath --disable-libquadmath-support" &
             " --enable-default-pie" & " --enable-libada" &
             " --enable-libstdcxx --enable-libstdcxx-threads" &
-            " --enable-languages=c,c++,ada");
+            " --disable-libsanitizer" & " --enable-languages=c,c++,ada");
          Build (Gcc_Name, "all-gcc", "install-gcc", Step => "1");
       end Build_Gcc_Bootstrap;
 
