@@ -5,7 +5,7 @@ We use this application to build an Alire compatible cross-compiling
 toolchain for a 64-bit ARM system running Linux. It could be expanded
 to include other architectures in the future.
 
-Requires [Alire](alire.ada.dev) to build and run.
+Requires [Alire](https://alire.ada.dev) to build and run.
 
 To build:
 ```
@@ -29,6 +29,6 @@ for use bt Alire.
 ## Using the toolchain
 
 Once generated the toolchain needs to be made available to Alire using and
-index. We have a [publically avaliable index](github.com/ccxtechnologies/alire-index-public)
+index. We have a [publically avaliable index](https://github.com/ccxtechnologies/alire-index-public)
 that you can use as an example, or can just link to if you want to use our
 latest toolchain builds.
