@@ -1,0 +1,7 @@
+/obj/
+/bin/
+/alire/
+/config/
+/ct-build/
+build.log
+gnat-*

@@ -1,0 +1,12 @@
+name = "crosstooler"
+description = "Builds Cross-Compiling GCC Toolchains for Alire"
+version = "1.0.0"
+
+authors = ["Charles Eidsness"]
+maintainers = ["Charles Eidsness <charles@ccxtechnologies.com>"]
+maintainers-logins = ["charleseidsness"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+executables = ["crosstooler"]
