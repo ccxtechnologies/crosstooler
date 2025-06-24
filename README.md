@@ -17,6 +17,11 @@ Then to run using a configured Alire toolchain:
 alr exec ./bin/crosstooler
 ```
 
+Or, to also create a build log:
+```
+alr exec ./bin/crosstooler | tee build.log 
+```
+
 Or, using the native toolchain from your Linux Distro:
 ```
 ./bin/crosstooler
