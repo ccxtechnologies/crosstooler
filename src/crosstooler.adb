@@ -74,10 +74,9 @@ procedure Crosstooler is
      Base_Directory & "/" & Crosstooler_Directory & "/toolchain/" &
      Gnat_Package_Name;
    Sysroot_Directory   : constant String :=
-     Base_Directory & "/" & Crosstooler_Directory & "/sys-root/" &
-     Architecture;
+     Toolchain_Directory & "/" & Architecture;
 
-   Gnu_Server : constant String := "https://ftpmirror.gnu.org";
+   Gnu_Server : constant String := "https://mirror.csclub.uwaterloo.ca/gnu";
 
    Binutils_Name     : constant String := "binutils-" & Binutils_Version;
    Binutils_Filename : constant String := Binutils_Name & ".tar.xz";
@@ -204,17 +203,6 @@ procedure Crosstooler is
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Build;
-
-      procedure Install
-        (Name : String; Target : String := "install"; Options : String := "")
-      is
-         Stamp : constant String := "install";
-      begin
-         if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Builder.Make (Name, Build_Directory, Target, Options);
-            File_System.Stamp (Stamp, Name, Stamp_Directory);
-         end if;
-      end Install;
 
       procedure Make_In_Place
         (Name : String; Target : String := ""; Options : String := "")
@@ -348,7 +336,8 @@ procedure Crosstooler is
             Architecture & " --with-headers=" & Sysroot_Directory &
             "/include" &
             " --disable-lipquadmath --disable-libquadmath-support" &
-            " --disable-libitm --disable-multilib");
+            " --disable-libitm --disable-multilib" &
+            " libc_cv_forced_unwind=yes");
 
          Ada.Environment_Variables.Clear ("CC");
          Ada.Environment_Variables.Clear ("LD");
@@ -391,11 +380,11 @@ procedure Crosstooler is
       procedure Build_Glibc is
       begin
          Log.Info ("Building Glibc...");
+         --  Delete the empty libc.so
+         File_System.Remove (Sysroot_Directory & "/lib/libc.so");
          Build
            (Glibc_Name, Options => "install_root=" & Sysroot_Directory,
             Step                => "2");
-         Install
-           (Glibc_Name, Options => "install_root=" & Toolchain_Directory);
       end Build_Glibc;
 
       procedure Build_Gcc is
