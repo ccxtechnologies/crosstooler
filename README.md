@@ -19,7 +19,7 @@ alr exec ./bin/crosstooler
 
 Or, to also create a build log:
 ```
-alr exec ./bin/crosstooler | tee build.log 
+alr exec ./bin/crosstooler | tee build.log
 ```
 
 Or, using the native toolchain from your Linux Distro:
@@ -34,6 +34,10 @@ for use bt Alire.
 ## Using the toolchain
 
 Once generated the toolchain needs to be made available to Alire using and
-index. We have a [publically avaliable index](https://github.com/ccxtechnologies/alire-index-public)
+index. We have a [publicly avaliable index](https://github.com/ccxtechnologies/alire-index-public)
 that you can use as an example, or can just link to if you want to use our
 latest toolchain builds.
+
+**Note that the build sysroot is hard coded in the toolchain, so if you try
+to use this on a system that has a toochain at the full sysroot path your
+builds with this toolchain will fail with errors about missing symbols.**
