@@ -380,11 +380,14 @@ procedure Crosstooler is
       procedure Build_Glibc is
       begin
          Log.Info ("Building Glibc...");
-         --  Delete the empty libc.so
-         File_System.Remove (Sysroot_Directory & "/lib/libc.so");
          Build
            (Glibc_Name, Options => "install_root=" & Sysroot_Directory,
             Step                => "2");
+
+         --  update the libc.so linker definition so that the installed library
+         --  is relocatable
+         Shell_Commands.Execute
+           ("sed -i s;//lib/;;g " & Sysroot_Directory & "/lib/libc.so");
       end Build_Glibc;
 
       procedure Build_Gcc is
