@@ -29,7 +29,7 @@ Or, using the native toolchain from your Linux Distro:
 
 All of the build files will be in the `ct-build` directory, and the
 toolchains will be packaged up into tar files using then gnat- format
-for use bt Alire.
+for use by Alire.
 
 ## Using the toolchain
 
