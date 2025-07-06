@@ -7,7 +7,6 @@ with Logger;
 package body Binutils is
    package Log is new Logger ("binutils");
 
-   Name     : constant String := "binutils-" & Version;
    Filename : constant String := Name & ".tar.xz";
    Url      : constant String := Gnu.Mirror & "/binutils";
 

@@ -2,6 +2,7 @@
 
 package Builder is
 
+   function Source_Directory (Architecture : String) return String;
    function Toolchain_Directory (Gnat_Package_Name : String) return String;
    function Sysroot_Directory
      (Gnat_Package_Name : String; Architecture : String) return String;

@@ -6,7 +6,6 @@ with Logger;
 package body Kernel_Headers is
    package Log is new Logger ("kernel-headers");
 
-   Name     : constant String := "linux-" & Version;
    Filename : constant String := Name & ".tar.xz";
    Url : constant String := "https://cdn.kernel.org/pub/linux/kernel/v6.x";
 
