@@ -12,6 +12,7 @@ with Logger;
 with File_System;
 with Shell_Commands;
 with Tools;
+with Builder;
 
 procedure Crosstooler is
    package Log is new Logger (Crosstooler_Config.Crate_Name);
@@ -123,30 +124,19 @@ procedure Crosstooler is
 
    procedure Download_All is
 
-      procedure Download (Filename : String; Url : String; Checksum : String)
-      is
-      begin
-         if not File_System.Is_Stamped ("download", Filename, Stamp_Directory)
-         then
-            File_System.Download (Filename, Url, Download_Directory, Checksum);
-            File_System.Stamp ("download", Filename, Stamp_Directory);
-         end if;
-      end Download;
-
    begin
-      File_System.Make_Directory (Download_Directory);
 
-      Download (Binutils_Filename, Binutils_Url, Binutils_Checksum);
-      Download
+      Builder.Download (Binutils_Filename, Binutils_Url, Binutils_Checksum);
+      Builder.Download
         (Kernel_Headers_Filename, Kernel_Headers_Url, Kernel_Headers_Checksum);
-      Download (Gcc_Filename, Gcc_Url, Gcc_Checksum);
-      Download (Glibc_Filename, Glibc_Url, Glibc_Checksum);
-      Download (Gmp_Filename, Gmp_Url, Gmp_Checksum);
-      Download (Mpfr_Filename, Mpfr_Url, Mpfr_Checksum);
-      Download (Mpc_Filename, Mpc_Url, Mpc_Checksum);
-      Download (Isl_Filename, Isl_Url, Isl_Checksum);
-      Download (Zlib_Filename, Zlib_Url, Zlib_Checksum);
-      Download (Zstd_Filename, Zstd_Url, Zstd_Checksum);
+      Builder.Download (Gcc_Filename, Gcc_Url, Gcc_Checksum);
+      Builder.Download (Glibc_Filename, Glibc_Url, Glibc_Checksum);
+      Builder.Download (Gmp_Filename, Gmp_Url, Gmp_Checksum);
+      Builder.Download (Mpfr_Filename, Mpfr_Url, Mpfr_Checksum);
+      Builder.Download (Mpc_Filename, Mpc_Url, Mpc_Checksum);
+      Builder.Download (Isl_Filename, Isl_Url, Isl_Checksum);
+      Builder.Download (Zlib_Filename, Zlib_Url, Zlib_Checksum);
+      Builder.Download (Zstd_Filename, Zstd_Url, Zstd_Checksum);
 
    end Download_All;
 
@@ -398,7 +388,7 @@ procedure Crosstooler is
       end Build_Gcc;
 
    begin
-      File_System.Make_Directory (Build_Directory);
+      Builder.Make_Directories;
 
       Build_Binutils;
       Install_Kernel_Headers;

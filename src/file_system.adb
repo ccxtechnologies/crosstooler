@@ -32,8 +32,8 @@ package body File_System is
    begin
       Log.Info ("Downloading: " & Filename);
       Shell_Commands.Execute
-        ("wget --no-verbose --show-progress --no-clobber --directory-prefix=" &
-         Destination & " " & Source & "/" & Filename);
+        ("wget --no-verbose --show-progress" & " --no-clobber --continue" &
+         " --directory-prefix=" & Destination & " " & Source & "/" & Filename);
 
       declare
          Downloaded_Checksum : constant String :=
