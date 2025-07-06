@@ -14,16 +14,12 @@ with Shell_Commands;
 with Builder;
 
 with Binutils;
+with Kernel_Headers;
 
 procedure Crosstooler is
    package Log is new Logger (Crosstooler_Config.Crate_Name);
 
-   Architecture        : constant String := "aarch64-linux-gnu";
-   Kernel_Architecture : constant String := "arm64";
-
-   Kernel_Headers_Version  : constant String := "6.1.141";
-   Kernel_Headers_Checksum : constant String :=
-     "bc3c45faf6f5f0450666c75fa9dad9bc7c0cf7c7cba0dbd94e5cfdc58229c116";
+   Architecture : constant String := "aarch64-linux-gnu";
 
    Gcc_Version  : constant String := "15.1.0";
    Gcc_Checksum : constant String :=
@@ -74,12 +70,6 @@ procedure Crosstooler is
 
    Gnu_Server : constant String := "https://mirror.csclub.uwaterloo.ca/gnu";
 
-   Kernel_Headers_Name : constant String := "linux-" & Kernel_Headers_Version;
-   Kernel_Headers_Filename : constant String :=
-     Kernel_Headers_Name & ".tar.xz";
-   Kernel_Headers_Url      : constant String :=
-     "https://cdn.kernel.org/pub/linux/kernel/v6.x";
-
    Gcc_Name     : constant String := "gcc-" & Gcc_Version;
    Gcc_Filename : constant String := Gcc_Name & ".tar.xz";
    Gcc_Url      : constant String := Gnu_Server & "/gcc/gcc-" & Gcc_Version;
@@ -118,9 +108,8 @@ procedure Crosstooler is
    begin
 
       Binutils.Download;
+      Kernel_Headers.Download;
 
-      Builder.Download
-        (Kernel_Headers_Filename, Kernel_Headers_Url, Kernel_Headers_Checksum);
       Builder.Download (Gcc_Filename, Gcc_Url, Gcc_Checksum);
       Builder.Download (Glibc_Filename, Glibc_Url, Glibc_Checksum);
       Builder.Download (Gmp_Filename, Gmp_Url, Gmp_Checksum);
@@ -137,8 +126,8 @@ procedure Crosstooler is
    begin
 
       Binutils.Extract (Architecture);
+      Kernel_Headers.Extract (Architecture);
 
-      Builder.Extract (Kernel_Headers_Filename, Architecture);
       Builder.Extract (Gcc_Filename, Architecture);
       Builder.Extract (Glibc_Filename, Architecture);
       Builder.Extract (Gmp_Filename, Architecture);
@@ -162,21 +151,6 @@ procedure Crosstooler is
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Gcc_Link;
-
-      procedure Install_Kernel_Headers is
-      begin
-         Log.Info ("Installing Linux Kernel Headers...");
-
-         Builder.Make_In_Place
-           (Kernel_Headers_Name, Architecture, "headers_install",
-            "ARCH=" & Kernel_Architecture & " INSTALL_HDR_PATH=" &
-            Sysroot_Directory);
-
-         Builder.Install_In_Place
-           (Kernel_Headers_Name, Architecture, "headers_install",
-            "ARCH=" & Kernel_Architecture & " INSTALL_HDR_PATH=" &
-            Toolchain_Directory);
-      end Install_Kernel_Headers;
 
       procedure Build_Zlib is
       begin
@@ -306,7 +280,7 @@ procedure Crosstooler is
    begin
 
       Binutils.Build (Gnat_Package_Name, Architecture);
-      Install_Kernel_Headers;
+      Kernel_Headers.Install (Gnat_Package_Name, Architecture);
 
       Build_Zlib;
       Build_Zstd;

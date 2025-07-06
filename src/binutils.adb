@@ -13,17 +13,19 @@ package body Binutils is
 
    procedure Download is
    begin
+      Log.Info ("Downloading...");
       Builder.Download (Filename, Url, Checksum);
    end Download;
 
    procedure Extract (Architecture : String) is
    begin
+      Log.Info ("Extracting...");
       Builder.Extract (Filename, Architecture);
    end Extract;
 
    procedure Build (Gnat_Package_Name : String; Architecture : String) is
    begin
-      Log.Info ("Building Version " & Version);
+      Log.Info ("Building Version " & Version & " ...");
 
       Builder.Configure
         (Name, Architecture,
