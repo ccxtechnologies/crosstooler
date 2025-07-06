@@ -11,7 +11,7 @@ with Logger;
 
 with File_System;
 with Shell_Commands;
-with Builder;
+with Tools;
 
 procedure Crosstooler is
    package Log is new Logger (Crosstooler_Config.Crate_Name);
@@ -184,8 +184,7 @@ procedure Crosstooler is
          Stamp : constant String := "configured";
       begin
          if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Builder.Configure
-              (Name, Source_Directory, Build_Directory, Options);
+            Tools.Configure (Name, Source_Directory, Build_Directory, Options);
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Configure;
@@ -198,7 +197,7 @@ procedure Crosstooler is
          Stamp : constant String := "build." & Step;
       begin
          if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Builder.Build
+            Tools.Build
               (Name, Build_Directory, Target, Install_Target, Options);
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
@@ -210,7 +209,7 @@ procedure Crosstooler is
          Stamp : constant String := "configured";
       begin
          if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Builder.Make (Name, Source_Directory, Target, Options);
+            Tools.Make (Name, Source_Directory, Target, Options);
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Make_In_Place;
@@ -221,7 +220,7 @@ procedure Crosstooler is
          Stamp : constant String := "install";
       begin
          if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Builder.Make (Name, Source_Directory, Target, Options);
+            Tools.Make (Name, Source_Directory, Target, Options);
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Install_In_Place;
@@ -232,7 +231,7 @@ procedure Crosstooler is
          Stamp : constant String := "build";
       begin
          if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Builder.Build (Name, Source_Directory, Target, Options => Options);
+            Tools.Build (Name, Source_Directory, Target, Options => Options);
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Build_In_Place;

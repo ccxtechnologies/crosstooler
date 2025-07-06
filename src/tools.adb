@@ -7,7 +7,7 @@ with Logger;
 with File_System;
 with Shell_Commands;
 
-package body Builder is
+package body Tools is
    package Log is new Logger ("builder");
 
    procedure Configure
@@ -66,4 +66,4 @@ package body Builder is
          Target);
    end Make;
 
-end Builder;
+end Tools;

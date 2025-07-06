@@ -1,6 +1,6 @@
 --  Copyright 2025, CCX Technologies
 
-package Builder is
+package Tools is
 
    procedure Configure
      (Name : String; Source : String; Destination : String; Options : String);
@@ -13,4 +13,4 @@ package Builder is
      (Name    : String; Destination : String; Target : String;
       Options : String := "");
 
-end Builder;
+end Tools;
