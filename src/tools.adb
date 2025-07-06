@@ -13,12 +13,10 @@ package body Tools is
    procedure Configure
      (Name : String; Source : String; Destination : String; Options : String)
    is
-      Base_Directory : constant String := Ada.Directories.Current_Directory;
-
-      Build_Directory   : constant String :=
-        Base_Directory & "/" & Destination & "/" & Name;
+      Base_Directory    : constant String := Ada.Directories.Current_Directory;
+      Build_Directory   : constant String := Destination & "/" & Name;
       Configure_Command : constant String :=
-        Base_Directory & "/" & Source & "/" & Name & "/" & "configure";
+        Source & "/" & Name & "/" & "configure";
    begin
       File_System.Make_Directory (Build_Directory);
       Ada.Directories.Set_Directory (Build_Directory);
@@ -33,10 +31,7 @@ package body Tools is
      (Name : String; Destination : String; Build_Target : String := "";
       Install_Target : String := "install"; Options : String := "")
    is
-      Base_Directory : constant String := Ada.Directories.Current_Directory;
-
-      Build_Directory : constant String :=
-        Base_Directory & "/" & Destination & "/" & Name;
+      Build_Directory : constant String := Destination & "/" & Name;
    begin
       Log.Info ("Building: " & Name);
 
@@ -54,10 +49,7 @@ package body Tools is
      (Name    : String; Destination : String; Target : String;
       Options : String := "")
    is
-      Base_Directory : constant String := Ada.Directories.Current_Directory;
-
-      Build_Directory : constant String :=
-        Base_Directory & "/" & Destination & "/" & Name;
+      Build_Directory : constant String := Destination & "/" & Name;
    begin
       Log.Info ("Making: " & Name);
       Shell_Commands.Execute

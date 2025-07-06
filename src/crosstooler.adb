@@ -13,15 +13,13 @@ with File_System;
 with Shell_Commands;
 with Builder;
 
+with Binutils;
+
 procedure Crosstooler is
    package Log is new Logger (Crosstooler_Config.Crate_Name);
 
    Architecture        : constant String := "aarch64-linux-gnu";
    Kernel_Architecture : constant String := "arm64";
-
-   Binutils_Version  : constant String := "2.44";
-   Binutils_Checksum : constant String :=
-     "ce2017e059d63e67ddb9240e9d4ec49c2893605035cd60e92ad53177f4377237";
 
    Kernel_Headers_Version  : constant String := "6.1.141";
    Kernel_Headers_Checksum : constant String :=
@@ -76,10 +74,6 @@ procedure Crosstooler is
 
    Gnu_Server : constant String := "https://mirror.csclub.uwaterloo.ca/gnu";
 
-   Binutils_Name     : constant String := "binutils-" & Binutils_Version;
-   Binutils_Filename : constant String := Binutils_Name & ".tar.xz";
-   Binutils_Url      : constant String := Gnu_Server & "/binutils";
-
    Kernel_Headers_Name : constant String := "linux-" & Kernel_Headers_Version;
    Kernel_Headers_Filename : constant String :=
      Kernel_Headers_Name & ".tar.xz";
@@ -123,7 +117,8 @@ procedure Crosstooler is
 
    begin
 
-      Builder.Download (Binutils_Filename, Binutils_Url, Binutils_Checksum);
+      Binutils.Download;
+
       Builder.Download
         (Kernel_Headers_Filename, Kernel_Headers_Url, Kernel_Headers_Checksum);
       Builder.Download (Gcc_Filename, Gcc_Url, Gcc_Checksum);
@@ -141,7 +136,8 @@ procedure Crosstooler is
 
    begin
 
-      Builder.Extract (Binutils_Filename, Architecture);
+      Binutils.Extract (Architecture);
+
       Builder.Extract (Kernel_Headers_Filename, Architecture);
       Builder.Extract (Gcc_Filename, Architecture);
       Builder.Extract (Glibc_Filename, Architecture);
@@ -166,21 +162,6 @@ procedure Crosstooler is
             File_System.Stamp (Stamp, Name, Stamp_Directory);
          end if;
       end Gcc_Link;
-
-      procedure Build_Binutils is
-      begin
-         Log.Info ("Building Binutils...");
-
-         Builder.Configure
-           (Binutils_Name, Architecture,
-            "--prefix=/" & " --with-sysroot=" & Sysroot_Directory &
-            " --target=" & Architecture &
-            " --disable-multilib --disable-libquadmath" &
-            " --disable-libquadmath-support");
-         Builder.Build
-           (Binutils_Name, Architecture,
-            Options => "DESTDIR=" & Toolchain_Directory);
-      end Build_Binutils;
 
       procedure Install_Kernel_Headers is
       begin
@@ -324,7 +305,7 @@ procedure Crosstooler is
 
    begin
 
-      Build_Binutils;
+      Binutils.Build (Gnat_Package_Name, Architecture);
       Install_Kernel_Headers;
 
       Build_Zlib;

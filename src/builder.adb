@@ -1,11 +1,14 @@
 --  Copyright 2025, CCX Technologies
 
+with Ada.Directories;
+
 with File_System;
 with Tools;
 
 package body Builder is
 
-   Crosstooler_Directory : constant String := "ct-build";
+   Crosstooler_Directory : constant String :=
+     Ada.Directories.Current_Directory & "/ct-build";
 
    Stamp_Directory    : constant String := Crosstooler_Directory & "/stamps";
    Download_Directory : constant String :=
@@ -21,11 +24,24 @@ package body Builder is
       return Crosstooler_Directory & "/build/" & Architecture;
    end Build_Directory;
 
+   function Toolchain_Directory (Gnat_Package_Name : String) return String is
+   begin
+      return Crosstooler_Directory & "/toolchain/" & Gnat_Package_Name;
+   end Toolchain_Directory;
+
+   function Sysroot_Directory
+     (Gnat_Package_Name : String; Architecture : String) return String
+   is
+   begin
+      return Toolchain_Directory (Gnat_Package_Name) & '/' & Architecture;
+   end Sysroot_Directory;
+
    procedure Make_Directories (Architecture : String) is
    begin
       File_System.Make_Directory (Stamp_Directory);
       File_System.Make_Directory (Download_Directory);
       File_System.Make_Directory (Source_Directory (Architecture));
+      File_System.Make_Directory (Build_Directory (Architecture));
    end Make_Directories;
 
    procedure Download (Filename : String; Url : String; Checksum : String) is
