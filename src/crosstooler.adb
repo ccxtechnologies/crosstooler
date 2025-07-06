@@ -1,4 +1,4 @@
---  Copyright 2025, CCX Technologies
+--  CopyrArchitecture, ight 2025, CCX Technologies
 
 with Ada.Directories;
 with Ada.Environment_Variables;
@@ -11,7 +11,6 @@ with Logger;
 
 with File_System;
 with Shell_Commands;
-with Tools;
 with Builder;
 
 procedure Crosstooler is
@@ -65,8 +64,6 @@ procedure Crosstooler is
 
    Crosstooler_Directory : constant String := "ct-build";
    Stamp_Directory : constant String := Crosstooler_Directory & "/stamps";
-   Download_Directory    : constant String :=
-     Crosstooler_Directory & "/downloads";
    Source_Directory : constant String := Crosstooler_Directory & "/source";
    Build_Directory       : constant String := Crosstooler_Directory & "/build";
 
@@ -142,89 +139,22 @@ procedure Crosstooler is
 
    procedure Extract_All is
 
-      procedure Extract (Filename : String) is
-      begin
-         if not File_System.Is_Stamped ("extract", Filename, Stamp_Directory)
-         then
-            File_System.Extract
-              (Filename, Download_Directory, Source_Directory);
-            File_System.Stamp ("extract", Filename, Stamp_Directory);
-         end if;
-      end Extract;
-
    begin
-      File_System.Make_Directory (Source_Directory);
 
-      Extract (Binutils_Filename);
-      Extract (Kernel_Headers_Filename);
-      Extract (Gcc_Filename);
-      Extract (Glibc_Filename);
-      Extract (Gmp_Filename);
-      Extract (Mpfr_Filename);
-      Extract (Mpc_Filename);
-      Extract (Isl_Filename);
-      Extract (Zlib_Filename);
-      Extract (Zstd_Filename);
+      Builder.Extract (Binutils_Filename, Architecture);
+      Builder.Extract (Kernel_Headers_Filename, Architecture);
+      Builder.Extract (Gcc_Filename, Architecture);
+      Builder.Extract (Glibc_Filename, Architecture);
+      Builder.Extract (Gmp_Filename, Architecture);
+      Builder.Extract (Mpfr_Filename, Architecture);
+      Builder.Extract (Mpc_Filename, Architecture);
+      Builder.Extract (Isl_Filename, Architecture);
+      Builder.Extract (Zlib_Filename, Architecture);
+      Builder.Extract (Zstd_Filename, Architecture);
 
    end Extract_All;
 
    procedure Build_All is
-
-      procedure Configure (Name : String; Options : String) is
-         Stamp : constant String := "configured";
-      begin
-         if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Tools.Configure (Name, Source_Directory, Build_Directory, Options);
-            File_System.Stamp (Stamp, Name, Stamp_Directory);
-         end if;
-      end Configure;
-
-      procedure Build
-        (Name           : String; Target : String := "";
-         Install_Target : String := "install"; Options : String := "";
-         Step           : String := "1")
-      is
-         Stamp : constant String := "build." & Step;
-      begin
-         if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Tools.Build
-              (Name, Build_Directory, Target, Install_Target, Options);
-            File_System.Stamp (Stamp, Name, Stamp_Directory);
-         end if;
-      end Build;
-
-      procedure Make_In_Place
-        (Name : String; Target : String := ""; Options : String := "")
-      is
-         Stamp : constant String := "configured";
-      begin
-         if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Tools.Make (Name, Source_Directory, Target, Options);
-            File_System.Stamp (Stamp, Name, Stamp_Directory);
-         end if;
-      end Make_In_Place;
-
-      procedure Install_In_Place
-        (Name : String; Target : String := "install"; Options : String := "")
-      is
-         Stamp : constant String := "install";
-      begin
-         if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Tools.Make (Name, Source_Directory, Target, Options);
-            File_System.Stamp (Stamp, Name, Stamp_Directory);
-         end if;
-      end Install_In_Place;
-
-      procedure Build_In_Place
-        (Name : String; Target : String := ""; Options : String := "")
-      is
-         Stamp : constant String := "build";
-      begin
-         if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
-            Tools.Build (Name, Source_Directory, Target, Options => Options);
-            File_System.Stamp (Stamp, Name, Stamp_Directory);
-         end if;
-      end Build_In_Place;
 
       procedure Gcc_Link (Name : String; Source : String) is
          Stamp : constant String := "gcc-linked";
@@ -241,26 +171,28 @@ procedure Crosstooler is
       begin
          Log.Info ("Building Binutils...");
 
-         Configure
-           (Binutils_Name,
+         Builder.Configure
+           (Binutils_Name, Architecture,
             "--prefix=/" & " --with-sysroot=" & Sysroot_Directory &
             " --target=" & Architecture &
             " --disable-multilib --disable-libquadmath" &
             " --disable-libquadmath-support");
-         Build (Binutils_Name, Options => "DESTDIR=" & Toolchain_Directory);
+         Builder.Build
+           (Binutils_Name, Architecture,
+            Options => "DESTDIR=" & Toolchain_Directory);
       end Build_Binutils;
 
       procedure Install_Kernel_Headers is
       begin
          Log.Info ("Installing Linux Kernel Headers...");
 
-         Make_In_Place
-           (Kernel_Headers_Name, "headers_install",
+         Builder.Make_In_Place
+           (Kernel_Headers_Name, Architecture, "headers_install",
             "ARCH=" & Kernel_Architecture & " INSTALL_HDR_PATH=" &
             Sysroot_Directory);
 
-         Install_In_Place
-           (Kernel_Headers_Name, "headers_install",
+         Builder.Install_In_Place
+           (Kernel_Headers_Name, Architecture, "headers_install",
             "ARCH=" & Kernel_Architecture & " INSTALL_HDR_PATH=" &
             Toolchain_Directory);
       end Install_Kernel_Headers;
@@ -268,15 +200,17 @@ procedure Crosstooler is
       procedure Build_Zlib is
       begin
          Log.Info ("Building Zlib...");
-         Configure (Zlib_Name, "--prefix=" & Sysroot_Directory);
-         Build (Zlib_Name);
+         Builder.Configure
+           (Zlib_Name, Architecture, "--prefix=" & Sysroot_Directory);
+         Builder.Build (Zlib_Name, Architecture);
       end Build_Zlib;
 
       procedure Build_Zstd is
       begin
          Log.Info ("Building Zstd...");
 
-         Build_In_Place (Zstd_Name, Options => "prefix=" & Sysroot_Directory);
+         Builder.Build_In_Place
+           (Zstd_Name, Architecture, Options => "prefix=" & Sysroot_Directory);
       end Build_Zstd;
 
       procedure Build_Gcc_Bootstrap is
@@ -288,8 +222,8 @@ procedure Crosstooler is
          Gcc_Link ("mpc", Mpc_Name);
          Gcc_Link ("isl", Isl_Name);
 
-         Configure
-           (Gcc_Name,
+         Builder.Configure
+           (Gcc_Name, Architecture,
             "--prefix=/" & " --with-sysroot=" & Sysroot_Directory &
             " --with-native-system-header-dir=/include" & " --target=" &
             Architecture & " --disable-multilib " &
@@ -298,8 +232,8 @@ procedure Crosstooler is
             " --enable-libstdcxx --enable-libstdcxx-threads" &
             " --disable-libsanitizer --disable-nls" &
             " --enable-languages=c,c++,ada");
-         Build
-           (Gcc_Name, "all-gcc", "install-gcc",
+         Builder.Build
+           (Gcc_Name, Architecture, "all-gcc", "install-gcc",
             Options => "DESTDIR=" & Toolchain_Directory, Step => "1");
       end Build_Gcc_Bootstrap;
 
@@ -319,8 +253,8 @@ procedure Crosstooler is
            ("RANLIB",
             Toolchain_Directory & "/bin/" & Architecture & "-ranlib");
 
-         Configure
-           (Glibc_Name,
+         Builder.Configure
+           (Glibc_Name, Architecture,
             "--prefix=/" & " --host=" & Architecture & " --target=" &
             Architecture & " --with-headers=" & Sysroot_Directory &
             "/include" &
@@ -333,8 +267,8 @@ procedure Crosstooler is
          Ada.Environment_Variables.Clear ("AR");
          Ada.Environment_Variables.Clear ("RANLIB");
 
-         Build
-           (Glibc_Name, "csu/subdir_lib", "install-headers",
+         Builder.Build
+           (Glibc_Name, Architecture, "csu/subdir_lib", "install-headers",
             "install-bootstrap-headers=yes install_root=" & Sysroot_Directory,
             Step => "1");
 
@@ -361,17 +295,18 @@ procedure Crosstooler is
       procedure Build_Libgcc is
       begin
          Log.Info ("Building Libgcc...");
-         Build
-           (Gcc_Name, "all-target-libgcc", "install-target-libgcc",
+         Builder.Build
+           (Gcc_Name, Architecture, "all-target-libgcc",
+            "install-target-libgcc",
             Options => "DESTDIR=" & Toolchain_Directory, Step => "2");
       end Build_Libgcc;
 
       procedure Build_Glibc is
       begin
          Log.Info ("Building Glibc...");
-         Build
-           (Glibc_Name, Options => "install_root=" & Sysroot_Directory,
-            Step                => "2");
+         Builder.Build
+           (Glibc_Name, Architecture,
+            Options => "install_root=" & Sysroot_Directory, Step => "2");
 
          --  update the libc.so linker definition so that the installed library
          --  is relocatable
@@ -382,13 +317,12 @@ procedure Crosstooler is
       procedure Build_Gcc is
       begin
          Log.Info ("Building Gcc...");
-         Build
-           (Gcc_Name, Install_Target => "install-strip",
+         Builder.Build
+           (Gcc_Name, Architecture, Install_Target => "install-strip",
             Options => "DESTDIR=" & Toolchain_Directory, Step => "3");
       end Build_Gcc;
 
    begin
-      Builder.Make_Directories;
 
       Build_Binutils;
       Install_Kernel_Headers;
@@ -420,7 +354,7 @@ begin
      ("Compiled: " & GNAT.Source_Info.Compilation_ISO_Date & "T" &
       GNAT.Source_Info.Compilation_Time);
 
-   File_System.Make_Directory (Stamp_Directory);
+   Builder.Make_Directories (Architecture);
 
    Download_All;
    Extract_All;
