@@ -68,6 +68,17 @@ package body Gcc is
          Step    => "1");
    end Build_Bootstrap;
 
+   procedure Build_Libgcc (Gnat_Package_Name : String; Architecture : String)
+   is
+   begin
+      Log.Info ("Building Version " & Version & " Libgcc...");
+      Builder.Build
+        (Name, Architecture, "all-target-libgcc", "install-target-libgcc",
+         Options =>
+           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
+         Step    => "2");
+   end Build_Libgcc;
+
    procedure Build (Gnat_Package_Name : String; Architecture : String) is
    begin
       Log.Info ("Building Version " & Version & " ...");
