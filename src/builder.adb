@@ -4,8 +4,11 @@ with Ada.Directories;
 
 with File_System;
 with Tools;
+with Logger;
+with Shell_Commands;
 
 package body Builder is
+   package Log is new Logger ("builder");
 
    Crosstooler_Directory : constant String :=
      Ada.Directories.Current_Directory & "/ct-build";
@@ -126,5 +129,14 @@ package body Builder is
          File_System.Stamp (Stamp, Name, Stamp_Directory);
       end if;
    end Build_In_Place;
+
+   procedure Create_Gnat_Package (Gnat_Package_Name : String) is
+   begin
+      Log.Info ("Creating Gnat Package: " & Gnat_Package_Name);
+      Shell_Commands.Execute
+        ("tar --directory " & Toolchain_Directory (Gnat_Package_Name) &
+         "/.. " & "-czf " & Gnat_Package_Name & ".tar.gz " &
+         Gnat_Package_Name);
+   end Create_Gnat_Package;
 
 end Builder;
