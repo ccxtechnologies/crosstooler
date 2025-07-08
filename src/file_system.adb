@@ -68,12 +68,17 @@ package body File_System is
          " --directory " & Destination);
    end Extract;
 
+   function Exists (Filename : String) return Boolean is
+   begin
+      return Ada.Directories.Exists (Filename);
+   end Exists;
+
    function Is_Stamped
      (Mark : String; Name : String; Destination : String) return Boolean
    is
       Filename : constant String := Destination & "/" & Name & "-" & Mark;
    begin
-      return Ada.Directories.Exists (Filename);
+      return Exists (Filename);
    end Is_Stamped;
 
    procedure Stamp (Mark : String; Name : String; Destination : String) is

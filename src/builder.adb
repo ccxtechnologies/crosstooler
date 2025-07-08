@@ -130,12 +130,17 @@ package body Builder is
       end if;
    end Build_In_Place;
 
+   function Gnat_Package_File (Gnat_Package_Name : String) return String is
+   begin
+      return Gnat_Package_Name & ".tar.gz";
+   end Gnat_Package_File;
+
    procedure Create_Gnat_Package (Gnat_Package_Name : String) is
    begin
       Log.Info ("Creating Gnat Package: " & Gnat_Package_Name);
       Shell_Commands.Execute
         ("tar --directory " & Toolchain_Directory (Gnat_Package_Name) &
-         "/.. " & "-czf " & Gnat_Package_Name & ".tar.gz " &
+         "/.. " & "-czf " & Gnat_Package_File (Gnat_Package_Name) & " " &
          Gnat_Package_Name);
    end Create_Gnat_Package;
 

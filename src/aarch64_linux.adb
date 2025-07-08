@@ -1,6 +1,7 @@
 --  Copyright 2025, CCX Technologies
 
 with Logger;
+with File_System;
 
 with Builder;
 with Binutils;
@@ -54,12 +55,18 @@ package body Aarch64_Linux is
    procedure Build is
    begin
 
+      if File_System.Exists (Builder.Gnat_Package_File (Gnat_Package_Name))
+      then
+         Log.Warning ("GNAT package already exists, skipping");
+         return;
+      else
+         Log.Heading ("Building " & Gnat_Package_Name);
+      end if;
+
       Builder.Make_Directories (Architecture);
 
       Download;
       Extract;
-
-      Log.Info ("Building " & Gnat_Package_Name);
 
       Binutils.Build (Gnat_Package_Name, Architecture);
       Kernel_Headers.Install (Gnat_Package_Name, Architecture);

@@ -19,11 +19,13 @@ package body Gcc is
    procedure Link
      (Package_Name : String; Source : String; Architecture : String)
    is
+      Link_File : constant String :=
+        Builder.Source_Directory (Architecture) & "/" & Name & "/" &
+        Package_Name;
    begin
-      File_System.Symbolic_Link
-        ("../" & Source,
-         Builder.Source_Directory (Architecture) & "/" & Name & "/" &
-         Package_Name);
+      if not File_System.Exists (Link_File) then
+         File_System.Symbolic_Link ("../" & Source, Link_File);
+      end if;
    end Link;
 
    procedure Download is

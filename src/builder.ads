@@ -30,6 +30,7 @@ package Builder is
      (Name    : String; Architecture : String; Target : String := "";
       Options : String := "");
 
+   function Gnat_Package_File (Gnat_Package_Name : String) return String;
    procedure Create_Gnat_Package (Gnat_Package_Name : String);
 
 end Builder;
