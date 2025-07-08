@@ -13,6 +13,8 @@ package body Kernel_Headers is
    begin
       if Architecture = "aarch64-linux-gnu" then
          return "arm64";
+      elsif Architecture = "x86_64-linux-gnu" then
+         return "x86";
       else
          raise Constraint_Error with "Unknown Architecture: " & Architecture;
       end if;

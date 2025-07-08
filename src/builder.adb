@@ -68,7 +68,7 @@ package body Builder is
 
    procedure Configure (Name : String; Architecture : String; Options : String)
    is
-      Stamp : constant String := "configured";
+      Stamp : constant String := "configured." & Architecture;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Configure
@@ -83,7 +83,7 @@ package body Builder is
       Install_Target : String := "install"; Options : String := "";
       Step           : String := "1")
    is
-      Stamp : constant String := "build." & Step;
+      Stamp : constant String := "build." & Architecture & "." & Step;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Build
@@ -97,7 +97,7 @@ package body Builder is
      (Name    : String; Architecture : String; Target : String := "";
       Options : String := "")
    is
-      Stamp : constant String := "configured";
+      Stamp : constant String := "configured." & Architecture;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Make (Name, Source_Directory (Architecture), Target, Options);
@@ -109,7 +109,7 @@ package body Builder is
      (Name    : String; Architecture : String; Target : String := "install";
       Options : String := "")
    is
-      Stamp : constant String := "install";
+      Stamp : constant String := "install." & Architecture;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Make (Name, Source_Directory (Architecture), Target, Options);
@@ -121,7 +121,7 @@ package body Builder is
      (Name    : String; Architecture : String; Target : String := "";
       Options : String := "")
    is
-      Stamp : constant String := "build";
+      Stamp : constant String := "build." & Architecture;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Build
