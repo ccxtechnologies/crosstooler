@@ -7,6 +7,7 @@ with Crosstooler_Config;
 with Logger;
 
 with Aarch64_Linux;
+with Aarch64_Elf;
 
 procedure Crosstooler is
    package Log is new Logger (Crosstooler_Config.Crate_Name);
@@ -19,6 +20,7 @@ begin
       GNAT.Source_Info.Compilation_Time);
 
    Aarch64_Linux.Build;
+   Aarch64_Elf.Build;
 
    Log.Heading ("Complete");
    GNAT.OS_Lib.OS_Exit (0);

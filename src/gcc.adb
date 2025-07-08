@@ -52,17 +52,35 @@ package body Gcc is
       Link ("mpc", Mpc.Name, Architecture);
       Link ("isl", Isl.Name, Architecture);
 
-      Builder.Configure
-        (Name, Architecture,
-         "--prefix=/" & " --with-sysroot=" &
-         Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
-         " --with-native-system-header-dir=/include" & " --target=" &
-         Architecture & " --disable-multilib " &
-         "--disable-libquadmath --disable-libquadmath-support" &
-         " --enable-default-pie" & " --enable-libada" &
-         " --enable-libstdcxx --enable-libstdcxx-threads" &
-         " --disable-libsanitizer --disable-nls" &
-         " --enable-languages=c,c++,ada");
+      if Architecture = "aarch64-linux-gnu" then
+
+         Builder.Configure
+           (Name, Architecture,
+            "--prefix=/" & " --with-sysroot=" &
+            Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
+            " --with-native-system-header-dir=/include" & " --target=" &
+            Architecture & " --disable-multilib " &
+            "--disable-libquadmath --disable-libquadmath-support" &
+            " --enable-default-pie" & " --enable-libada" &
+            " --enable-libstdcxx --enable-libstdcxx-threads" &
+            " --disable-libsanitizer --disable-nls" &
+            " --enable-languages=c,c++,ada");
+
+      elsif Architecture = "aarch64-elf" then
+
+         Builder.Configure
+           (Name, Architecture,
+            "--prefix=/" & " --with-sysroot=" &
+            Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
+            " --target=" & Architecture & " --disable-multilib" &
+            " --disable-libquadmath --disable-libquadmath-support" &
+            " --enable-default-pie" & " --enable-libada" &
+            " --disable-libsanitizer --disable-nls" & " --without-headers" &
+            " --with-newlib" & " --enable-languages=c,ada");
+
+      else
+         raise Constraint_Error with "Unknown Architecture: " & Architecture;
+      end if;
 
       Builder.Build
         (Name, Architecture, "all-gcc", "install-gcc",
