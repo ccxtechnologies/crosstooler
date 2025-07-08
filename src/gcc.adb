@@ -23,9 +23,10 @@ package body Gcc is
         Builder.Source_Directory (Architecture) & "/" & Name & "/" &
         Package_Name;
    begin
-      if not File_System.Exists (Link_File) then
-         File_System.Symbolic_Link ("../" & Source, Link_File);
+      if File_System.Exists (Link_File) then
+         File_System.Remove (Link_File);
       end if;
+      File_System.Symbolic_Link ("../" & Source, Link_File);
    end Link;
 
    procedure Download is
@@ -84,6 +85,7 @@ package body Gcc is
    procedure Build (Gnat_Package_Name : String; Architecture : String) is
    begin
       Log.Info ("Building Version " & Version & " ...");
+
       Builder.Build
         (Name, Architecture, Install_Target => "install-strip",
          Options                            =>

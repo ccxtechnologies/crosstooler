@@ -22,9 +22,17 @@ package body Builder is
       return Crosstooler_Directory & "/source/" & Architecture;
    end Source_Directory;
 
-   function Build_Directory (Architecture : String) return String is
+   function Build_Directory
+     (Architecture : String; Variant : String := "") return String
+   is
+      Directory : constant String :=
+        Crosstooler_Directory & "/build/" & Architecture;
    begin
-      return Crosstooler_Directory & "/build/" & Architecture;
+      if Variant = "" then
+         return Directory;
+      else
+         return Directory & "/" & Variant;
+      end if;
    end Build_Directory;
 
    function Toolchain_Directory (Gnat_Package_Name : String) return String is
@@ -66,14 +74,18 @@ package body Builder is
       end if;
    end Extract;
 
-   procedure Configure (Name : String; Architecture : String; Options : String)
+   procedure Configure
+     (Name    : String; Architecture : String; Options : String;
+      Variant : String := "")
    is
-      Stamp : constant String := "configured." & Architecture;
+      Stamp : constant String :=
+        "configured." & (if Variant = "" then "" else Variant & ".") &
+        Architecture;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Configure
            (Name, Source_Directory (Architecture),
-            Build_Directory (Architecture), Options);
+            Build_Directory (Architecture, Variant), Options);
          File_System.Stamp (Stamp, Name, Stamp_Directory);
       end if;
    end Configure;
@@ -81,14 +93,16 @@ package body Builder is
    procedure Build
      (Name           : String; Architecture : String; Target : String := "";
       Install_Target : String := "install"; Options : String := "";
-      Step           : String := "1")
+      Step           : String := "1"; Variant : String := "")
    is
-      Stamp : constant String := "build." & Architecture & "." & Step;
+      Stamp : constant String :=
+        "build." & (if Variant = "" then "" else Variant & ".") &
+        Architecture & "." & Step;
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Build
-           (Name, Build_Directory (Architecture), Target, Install_Target,
-            Options);
+           (Name, Build_Directory (Architecture, Variant), Target,
+            Install_Target, Options);
          File_System.Stamp (Stamp, Name, Stamp_Directory);
       end if;
    end Build;

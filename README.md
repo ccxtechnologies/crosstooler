@@ -19,7 +19,7 @@ alr exec ./bin/crosstooler
 
 Or, to also create a build log:
 ```
-alr exec ./bin/crosstooler | tee build.log
+alr exec ./bin/crosstooler > >(tee -a build.log) 2> >(tee -a build.errors >&2)
 ```
 
 Or, using the native toolchain from your Linux Distro:

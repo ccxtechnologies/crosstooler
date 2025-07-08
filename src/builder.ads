@@ -6,7 +6,8 @@ package Builder is
    function Toolchain_Directory (Gnat_Package_Name : String) return String;
    function Sysroot_Directory
      (Gnat_Package_Name : String; Architecture : String) return String;
-   function Build_Directory (Architecture : String) return String;
+   function Build_Directory
+     (Architecture : String; Variant : String := "") return String;
 
    procedure Make_Directories (Architecture : String);
 
@@ -14,11 +15,12 @@ package Builder is
    procedure Extract (Filename : String; Architecture : String);
 
    procedure Configure
-     (Name : String; Architecture : String; Options : String);
+     (Name    : String; Architecture : String; Options : String;
+      Variant : String := "");
    procedure Build
      (Name           : String; Architecture : String; Target : String := "";
       Install_Target : String := "install"; Options : String := "";
-      Step           : String := "1");
+      Step           : String := "1"; Variant : String := "");
 
    procedure Make_In_Place
      (Name    : String; Architecture : String; Target : String := "";
