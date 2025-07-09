@@ -78,8 +78,9 @@ package body Gcc is
             " --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
             " --enable-default-pie" & " --enable-libada" &
-            " --disable-libsanitizer --disable-nls" & " --without-headers" &
-            " --with-newlib" & " --enable-languages=c,c++,ada");
+            " --disable-libsanitizer --disable-nls" &
+            " --without-headers --disable-libssp" & " --with-newlib" &
+            " --enable-languages=c,c++,ada");
 
       else
          raise Constraint_Error with "Unknown Architecture: " & Architecture;
