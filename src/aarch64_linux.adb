@@ -1,5 +1,7 @@
 --  Copyright 2025, CCX Technologies
 
+with Ada.Environment_Variables;
+
 with Logger;
 with File_System;
 
@@ -53,6 +55,7 @@ package body Aarch64_Linux is
    end Extract;
 
    procedure Build is
+      Path : constant String := Ada.Environment_Variables.Value ("PATH");
    begin
 
       if File_System.Exists (Builder.Gnat_Package_File (Gnat_Package_Name))
@@ -67,6 +70,10 @@ package body Aarch64_Linux is
 
       Download;
       Extract;
+
+      Ada.Environment_Variables.Set
+        ("PATH",
+         Builder.Toolchain_Directory (Gnat_Package_Name) & "/bin:" & Path);
 
       Binutils.Build (Gnat_Package_Name, Architecture);
       Kernel_Headers.Install (Gnat_Package_Name, Architecture);
