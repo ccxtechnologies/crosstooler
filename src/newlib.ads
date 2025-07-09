@@ -10,4 +10,6 @@ package Newlib is
    procedure Download;
    procedure Extract (Architecture : String);
 
+   procedure Build (Gnat_Package_Name : String; Architecture : String);
+
 end Newlib;

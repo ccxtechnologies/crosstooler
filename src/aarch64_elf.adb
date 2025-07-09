@@ -72,6 +72,9 @@ package body Aarch64_Elf is
       Zstd.Build (Gnat_Package_Name, Architecture);
 
       Gcc.Build_Bootstrap (Gnat_Package_Name, Architecture);
+      Newlib.Build (Gnat_Package_Name, Architecture);
+
+      Gcc.Build (Gnat_Package_Name, Architecture);
 
    end Build;
 

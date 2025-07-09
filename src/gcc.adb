@@ -9,6 +9,7 @@ with Gmp;
 with Mpfr;
 with Mpc;
 with Isl;
+with Newlib;
 
 package body Gcc is
    package Log is new Logger ("gcc");
@@ -72,11 +73,13 @@ package body Gcc is
            (Name, Architecture,
             "--prefix=/" & " --with-sysroot=" &
             Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
-            " --target=" & Architecture & " --disable-multilib" &
+            " --target=" & Architecture & " --with-headers=" &
+            Builder.Source_Directory (Architecture) & "/" & Newlib.Name &
+            " --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
             " --enable-default-pie" & " --enable-libada" &
             " --disable-libsanitizer --disable-nls" & " --without-headers" &
-            " --with-newlib" & " --enable-languages=c,ada");
+            " --with-newlib" & " --enable-languages=c,c++,ada");
 
       else
          raise Constraint_Error with "Unknown Architecture: " & Architecture;
