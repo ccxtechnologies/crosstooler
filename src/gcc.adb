@@ -1,5 +1,7 @@
 --  Copyright 2025, CCX Technologies
 
+with Ada.Environment_Variables;
+
 with Gnu;
 with Builder;
 with Logger;
@@ -45,6 +47,7 @@ package body Gcc is
    procedure Build_Bootstrap
      (Gnat_Package_Name : String; Architecture : String)
    is
+      Path : constant String := Ada.Environment_Variables.Value ("PATH");
    begin
       Log.Info ("Building Version " & Version & " Bootstrap...");
 
@@ -52,6 +55,10 @@ package body Gcc is
       Link ("mpfr", Mpfr.Name, Architecture);
       Link ("mpc", Mpc.Name, Architecture);
       Link ("isl", Isl.Name, Architecture);
+
+      Ada.Environment_Variables.Set
+        ("PATH",
+         Builder.Toolchain_Directory (Gnat_Package_Name) & "/bin:" & Path);
 
       if Architecture = "aarch64-linux-gnu" then
 
@@ -82,8 +89,11 @@ package body Gcc is
             " --with-newlib" & " --enable-languages=c,c++,ada");
 
       else
+         Ada.Environment_Variables.Set ("PATH", Path);
          raise Constraint_Error with "Unknown Architecture: " & Architecture;
       end if;
+
+      Ada.Environment_Variables.Set ("PATH", Path);
 
       Builder.Build
         (Name, Architecture, "all-gcc", "install-gcc",
