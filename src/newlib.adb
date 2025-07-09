@@ -36,9 +36,18 @@ package body Newlib is
          " --disable-newlib-supplied-syscalls" & " --disable-nls");
 
       Builder.Build
-        (Name, Architecture, Install_Target => "install-target-newlib",
-         Options                            =>
-           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name));
+        (Name, Architecture, "all-target-newlib",
+         Install_Target => "install-target-newlib",
+         Options        =>
+           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
+         Step           => "1");
+
+      Builder.Build
+        (Name, Architecture, "all-target-libgloss",
+         Install_Target => "install-target-libgloss",
+         Options        =>
+           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
+         Step           => "2");
 
    end Build;
 
