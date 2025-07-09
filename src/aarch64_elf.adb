@@ -1,5 +1,7 @@
 --  Copyright 2025, CCX Technologies
 
+with Ada.Environment_Variables;
+
 with Logger;
 with File_System;
 
@@ -51,6 +53,7 @@ package body Aarch64_Elf is
    end Extract;
 
    procedure Build is
+      Path : constant String := Ada.Environment_Variables.Value ("PATH");
    begin
 
       if File_System.Exists (Builder.Gnat_Package_File (Gnat_Package_Name))
@@ -66,15 +69,22 @@ package body Aarch64_Elf is
       Download;
       Extract;
 
+      Ada.Environment_Variables.Set
+        ("PATH",
+         Builder.Toolchain_Directory (Gnat_Package_Name) & "/bin:" & Path);
+
       Binutils.Build (Gnat_Package_Name, Architecture);
 
       Zlib.Build (Gnat_Package_Name, Architecture);
       Zstd.Build (Gnat_Package_Name, Architecture);
 
       Gcc.Build_Bootstrap (Gnat_Package_Name, Architecture);
+
       Newlib.Build (Gnat_Package_Name, Architecture);
 
       Gcc.Build (Gnat_Package_Name, Architecture);
+
+      --  TODO: Create toolchain package
 
    end Build;
 
