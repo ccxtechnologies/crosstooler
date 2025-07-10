@@ -73,7 +73,8 @@ package body Gcc is
            (Name, Architecture,
             "--prefix=/" & " --with-sysroot=" &
             Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
-            " --target=" & Architecture & " --with-headers=" &
+            " --with-native-system-header-dir=/include" & " --target=" &
+            Architecture & " --with-headers=" &
             Builder.Source_Directory (Architecture) & "/" & Newlib.Name &
             " --enable-lto --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
