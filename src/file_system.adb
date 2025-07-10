@@ -25,6 +25,12 @@ package body File_System is
       Shell_Commands.Execute ("rm " & Filename);
    end Remove;
 
+   procedure Move (Source : String; Destination : String) is
+   begin
+      Log.Debug ("Moving: " & Source & " to " & Destination);
+      Shell_Commands.Execute ("mv " & Source & " " & Destination);
+   end Move;
+
    procedure Download
      (Filename : String; Source : String; Destination : String;
       Checksum : String)

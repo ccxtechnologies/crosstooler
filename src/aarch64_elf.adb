@@ -84,6 +84,10 @@ package body Aarch64_Elf is
 
       Gcc.Build (Gnat_Package_Name, Architecture);
 
+      --  TODO: Add bb-runtimes
+
+      Newlib.Cleanup (Gnat_Package_Name, Architecture);
+
       --  TODO: Create toolchain package
 
    end Build;
