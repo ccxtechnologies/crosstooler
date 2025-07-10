@@ -86,8 +86,6 @@ package body Aarch64_Elf is
 
       --  TODO: Add bb-runtimes
 
-      Newlib.Cleanup (Gnat_Package_Name, Architecture);
-
       Ada.Environment_Variables.Set ("PATH", Path);
 
       --  TODO: Create toolchain package

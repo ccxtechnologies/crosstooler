@@ -49,24 +49,6 @@ package body Newlib is
          Install_Target => "install-target-libgloss",
          Options        => "DESTDIR=" & Toolchain_Directory, Step => "2");
 
-      --  Move the libgloss crt0.o which has undefined symbols and replace
-      --  with an empty crt0.o os that the automated compiler checks when
-      --  building libada don't fail
-      File_System.Move
-        (Sysroot_Directory & "/lib/crt0.o",
-         Sysroot_Directory & "/lib/gloss-crt0.o");
-      File_System.Write ("crt0.o", Sysroot_Directory & "/lib");
-
    end Build;
-
-   procedure Cleanup (Gnat_Package_Name : String; Architecture : String) is
-      Sysroot_Directory : constant String :=
-        Builder.Sysroot_Directory (Gnat_Package_Name, Architecture);
-   begin
-      File_System.Remove (Sysroot_Directory & "/crt0.o");
-      File_System.Move
-        (Sysroot_Directory & "/lib/gloss-crt0.o",
-         Sysroot_Directory & "/lib/crt0.o");
-   end Cleanup;
 
 end Newlib;

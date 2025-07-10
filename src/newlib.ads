@@ -11,6 +11,5 @@ package Newlib is
    procedure Extract (Architecture : String);
 
    procedure Build (Gnat_Package_Name : String; Architecture : String);
-   procedure Cleanup (Gnat_Package_Name : String; Architecture : String);
 
 end Newlib;

@@ -78,7 +78,7 @@ package body Gcc is
             Builder.Source_Directory (Architecture) & "/" & Newlib.Name &
             " --enable-lto --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
-            " --enable-default-pie  --enable-libada" &
+            " --enable-default-pie  --disable-libada" &
             " --disable-libsanitizer --disable-nls" &
             " --enable-libstdcxx --enable-libstdcxx-threads" &
             " --disable-libssp --without-headers --with-newlib" &
