@@ -88,6 +88,8 @@ package body Aarch64_Linux is
       Glibc.Build (Gnat_Package_Name, Architecture);
       Gcc.Build (Gnat_Package_Name, Architecture);
 
+      Ada.Environment_Variables.Set ("PATH", Path);
+
       Builder.Create_Gnat_Package (Gnat_Package_Name);
 
       Log.Heading ("Created toolchain: " & Gnat_Package_Name);

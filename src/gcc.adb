@@ -62,7 +62,7 @@ package body Gcc is
             " --with-native-system-header-dir=/include" & " --target=" &
             Architecture & " --enable-lto --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
-            " --enable-default-pie" & " --enable-libada" &
+            " --enable-default-pie  --enable-libada" &
             " --enable-libstdcxx --enable-libstdcxx-threads" &
             " --disable-libsanitizer --disable-nls" &
             " --enable-languages=c,c++,ada");
@@ -77,9 +77,11 @@ package body Gcc is
             Builder.Source_Directory (Architecture) & "/" & Newlib.Name &
             " --enable-lto --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
-            " --enable-default-pie" & " --enable-libada" &
-            " --disable-libsanitizer --disable-nls --disable-libssp" &
-            " --without-headers --with-newlib" & " --enable-languages=c,ada");
+            " --enable-default-pie  --enable-libada" &
+            " --disable-libsanitizer --disable-nls" &
+            " --enable-libstdcxx --enable-libstdcxx-threads" &
+            " --disable-libssp --without-headers --with-newlib" &
+            " --enable-languages=c,c++,ada");
 
       else
          raise Constraint_Error with "Unknown Architecture: " & Architecture;

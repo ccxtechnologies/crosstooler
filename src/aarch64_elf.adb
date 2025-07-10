@@ -88,6 +88,8 @@ package body Aarch64_Elf is
 
       Newlib.Cleanup (Gnat_Package_Name, Architecture);
 
+      Ada.Environment_Variables.Set ("PATH", Path);
+
       --  TODO: Create toolchain package
 
    end Build;
