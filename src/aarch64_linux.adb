@@ -90,7 +90,6 @@ package body Aarch64_Linux is
       Ada.Environment_Variables.Set ("PATH", Path);
 
       Builder.Create_Gnat_Package (Gnat_Package_Name);
-
       Log.Heading ("Created toolchain: " & Gnat_Package_Name);
 
    end Build;

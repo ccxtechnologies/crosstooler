@@ -2,7 +2,6 @@
 
 with Builder;
 with Logger;
-with File_System;
 
 package body Newlib is
    package Log is new Logger ("newlib");
