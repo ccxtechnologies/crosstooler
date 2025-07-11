@@ -111,15 +111,16 @@ package body Gcc is
       Log.Info ("Building Version " & Version & " ...");
 
       Builder.Build
-        (Name, Architecture, Install_Target => "install-strip",
-         Options                            =>
-           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
-         Step                               => "3");
-
-      Builder.Build
         (Name, Architecture, "cross-gnattools", "ada.all.cross",
          Options      =>
            "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
-         Subdirectory => "/gcc", Step => "4");
+         Subdirectory => "/gcc", Step => "3");
+
+      Builder.Build
+        (Name, Architecture, Install_Target => "install-strip",
+         Options                            =>
+           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
+         Step                               => "4");
+
    end Build;
 end Gcc;
