@@ -115,5 +115,11 @@ package body Gcc is
          Options                            =>
            "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
          Step                               => "3");
+
+      Builder.Build
+        (Name, Architecture, "cross-gnattools", "ada.all.cross",
+         Options      =>
+           "DESTDIR=" & Builder.Toolchain_Directory (Gnat_Package_Name),
+         Subdirectory => "/gcc", Step => "4");
    end Build;
 end Gcc;

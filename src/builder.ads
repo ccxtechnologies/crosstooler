@@ -20,7 +20,8 @@ package Builder is
    procedure Build
      (Name           : String; Architecture : String; Target : String := "";
       Install_Target : String := "install"; Options : String := "";
-      Step           : String := "1"; Variant : String := "");
+      Step           : String := "1"; Variant : String := "";
+      Subdirectory   : String := "");
 
    procedure Make_In_Place
      (Name    : String; Architecture : String; Target : String := "";

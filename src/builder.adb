@@ -93,7 +93,8 @@ package body Builder is
    procedure Build
      (Name           : String; Architecture : String; Target : String := "";
       Install_Target : String := "install"; Options : String := "";
-      Step           : String := "1"; Variant : String := "")
+      Step           : String := "1"; Variant : String := "";
+      Subdirectory   : String := "")
    is
       Stamp : constant String :=
         "build." & (if Variant = "" then "" else Variant & ".") &
@@ -101,8 +102,8 @@ package body Builder is
    begin
       if not File_System.Is_Stamped (Stamp, Name, Stamp_Directory) then
          Tools.Build
-           (Name, Build_Directory (Architecture, Variant), Target,
-            Install_Target, Options);
+           (Name & Subdirectory, Build_Directory (Architecture, Variant),
+            Target, Install_Target, Options);
          File_System.Stamp (Stamp, Name, Stamp_Directory);
       end if;
    end Build;
