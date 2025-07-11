@@ -15,6 +15,7 @@ with Isl;
 with Zlib;
 with Zstd;
 with Newlib;
+with Bb_Runtimes;
 
 package body Aarch64_Elf is
 
@@ -26,7 +27,6 @@ package body Aarch64_Elf is
 
    procedure Download is
    begin
-
       Binutils.Download;
       Gcc.Download;
       Gmp.Download;
@@ -36,7 +36,7 @@ package body Aarch64_Elf is
       Zlib.Download;
       Zstd.Download;
       Newlib.Download;
-
+      Bb_Runtimes.Download;
    end Download;
 
    procedure Extract is
@@ -50,6 +50,7 @@ package body Aarch64_Elf is
       Zlib.Extract (Architecture);
       Zstd.Extract (Architecture);
       Newlib.Extract (Architecture);
+      Bb_Runtimes.Extract (Architecture);
    end Extract;
 
    procedure Build is
@@ -81,10 +82,8 @@ package body Aarch64_Elf is
       Gcc.Build_Bootstrap (Gnat_Package_Name, Architecture);
 
       Newlib.Build (Gnat_Package_Name, Architecture);
-
       Gcc.Build (Gnat_Package_Name, Architecture);
-
-      --  TODO: Add bb-runtimes
+      Bb_Runtimes.Build (Gnat_Package_Name, Architecture);
 
       Ada.Environment_Variables.Set ("PATH", Path);
 

@@ -27,7 +27,6 @@ package body Aarch64_Linux is
 
    procedure Download is
    begin
-
       Binutils.Download;
       Kernel_Headers.Download;
       Gcc.Download;
