@@ -23,7 +23,7 @@ package body Aarch64_Linux is
 
    Architecture      : constant String := "aarch64-linux-gnu";
    Gnat_Package_Name : constant String :=
-     "gnat-aarch64-linux64-x86_64-" & Gcc.Version & "-1";
+     "gnat-aarch64-linux64-x86_64-" & Gcc.Version & "-2";
 
    procedure Download is
    begin
