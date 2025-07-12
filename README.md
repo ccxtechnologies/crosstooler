@@ -9,12 +9,12 @@ architectures in the future.
 The toolchains include C and C++ compilers (and a relavent libc and Ada runtime)
 but are primarily intended for building Ada applications.
 
-Requires [Alire](https://alire.ada.dev) to build and run the bulder tool.
+[Alire](https://alire.ada.dev) is used to build and run the crosstooler tool.
 
-These toolchains could be used on their own but are really intended to be loaded
+The generated toolchains can be used on their own but are really intended to be loaded
 and used with Alire.
 
-The corsstooler application is intended to run on a Linux host system and may not
+The crosstooler application is intended to run on a Linux host system and may not
 work on other platforms.
 
 To build:
