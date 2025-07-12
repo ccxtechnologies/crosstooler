@@ -4,8 +4,11 @@ package File_System is
 
    Failure : exception;
 
+   function Exists (Filename : String) return Boolean;
+
    procedure Make_Directory (Name : String);
    procedure Remove (Filename : String);
+   procedure Move (Source : String; Destination : String);
    procedure Download
      (Filename : String; Source : String; Destination : String;
       Checksum : String);

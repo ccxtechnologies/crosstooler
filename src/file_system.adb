@@ -25,6 +25,12 @@ package body File_System is
       Shell_Commands.Execute ("rm " & Filename);
    end Remove;
 
+   procedure Move (Source : String; Destination : String) is
+   begin
+      Log.Debug ("Moving: " & Source & " to " & Destination);
+      Shell_Commands.Execute ("mv " & Source & " " & Destination);
+   end Move;
+
    procedure Download
      (Filename : String; Source : String; Destination : String;
       Checksum : String)
@@ -32,8 +38,8 @@ package body File_System is
    begin
       Log.Info ("Downloading: " & Filename);
       Shell_Commands.Execute
-        ("wget --no-verbose --show-progress --no-clobber --directory-prefix=" &
-         Destination & " " & Source & "/" & Filename);
+        ("wget --no-verbose --show-progress" & " --no-clobber --continue" &
+         " --directory-prefix=" & Destination & " " & Source & "/" & Filename);
 
       declare
          Downloaded_Checksum : constant String :=
@@ -68,12 +74,17 @@ package body File_System is
          " --directory " & Destination);
    end Extract;
 
+   function Exists (Filename : String) return Boolean is
+   begin
+      return Ada.Directories.Exists (Filename);
+   end Exists;
+
    function Is_Stamped
      (Mark : String; Name : String; Destination : String) return Boolean
    is
       Filename : constant String := Destination & "/" & Name & "-" & Mark;
    begin
-      return Ada.Directories.Exists (Filename);
+      return Exists (Filename);
    end Is_Stamped;
 
    procedure Stamp (Mark : String; Name : String; Destination : String) is
