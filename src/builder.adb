@@ -1,6 +1,7 @@
 --  Copyright 2025, CCX Technologies
 
 with Ada.Directories;
+with Ada.Characters.Latin_1;
 
 with File_System;
 with Tools;
@@ -16,6 +17,29 @@ package body Builder is
    Stamp_Directory    : constant String := Crosstooler_Directory & "/stamps";
    Download_Directory : constant String :=
      Crosstooler_Directory & "/downloads";
+
+   function Is_Whitespace (Source : Character) return Boolean is
+   begin
+      return
+        Source = Ada.Characters.Latin_1.Space
+        or else Source = Ada.Characters.Latin_1.HT;
+   end Is_Whitespace;
+
+   function Strip_Whitespace (Source : String) return String is
+      Start_Index : Integer := Source'First;
+   begin
+      for I in Source'Range loop
+         Start_Index := I;
+         exit when not Is_Whitespace (Source (I));
+      end loop;
+
+      return Source (Start_Index .. Source'Last);
+   end Strip_Whitespace;
+
+   function Get_Host return String is
+   begin
+      return Strip_Whitespace (Shell_Commands.Execute ("gcc -dumpmachine"));
+   end Get_Host;
 
    function Source_Directory (Architecture : String) return String is
    begin

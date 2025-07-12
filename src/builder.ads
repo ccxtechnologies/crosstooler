@@ -9,6 +9,8 @@ package Builder is
    function Build_Directory
      (Architecture : String; Variant : String := "") return String;
 
+   function Get_Host return String;
+
    procedure Make_Directories (Architecture : String);
 
    procedure Download (Filename : String; Url : String; Checksum : String);

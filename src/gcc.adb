@@ -45,8 +45,10 @@ package body Gcc is
    procedure Build_Bootstrap
      (Gnat_Package_Name : String; Architecture : String)
    is
+      Host : constant String := Builder.Get_Host;
    begin
       Log.Info ("Building Version " & Version & " Bootstrap...");
+      Log.Info ("Building on host " & Host);
 
       Link ("gmp", Gmp.Name, Architecture);
       Link ("mpfr", Mpfr.Name, Architecture);
@@ -59,8 +61,8 @@ package body Gcc is
            (Name, Architecture,
             "--prefix=/" & " --with-sysroot=" &
             Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
-            " --with-native-system-header-dir=/include" & " --target=" &
-            Architecture & " --enable-lto --disable-multilib" &
+            " --with-native-system-header-dir=/include" & " --host=" & Host &
+            " --target=" & Architecture & " --enable-lto --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
             " --enable-default-pie  --enable-libada" &
             " --enable-libstdcxx --enable-libstdcxx-threads" &
@@ -73,8 +75,8 @@ package body Gcc is
            (Name, Architecture,
             "--prefix=/" & " --with-sysroot=" &
             Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
-            " --with-native-system-header-dir=/include" & " --target=" &
-            Architecture & " --with-headers=" &
+            " --with-native-system-header-dir=/include" & " --host=" & Host &
+            " --target=" & Architecture & " --with-headers=" &
             Builder.Source_Directory (Architecture) & "/" & Newlib.Name &
             " --enable-lto --disable-multilib" &
             " --disable-libquadmath --disable-libquadmath-support" &
