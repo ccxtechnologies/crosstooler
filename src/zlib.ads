@@ -2,9 +2,9 @@
 
 package Zlib is
 
-   Version  : constant String := "1.3.1";
+   Version  : constant String := "1.3.2";
    Checksum : constant String :=
-     "9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23";
+     "bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16";
    Name     : constant String := "zlib-" & Version;
 
    procedure Download;

@@ -2,9 +2,9 @@
 
 package Gcc is
 
-   Version  : constant String := "15.1.0";
+   Version  : constant String := "15.3.0";
    Checksum : constant String :=
-     "e2b09ec21660f01fecffb715e0120265216943f038d0e48a9868713e54f06cea";
+     "fa59c1beef8995f27c4d71c1df227587189315d3e6faff1bb4306e61b0c530eb";
    Name     : constant String := "gcc-" & Version;
 
    procedure Download;

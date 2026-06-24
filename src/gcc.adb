@@ -59,7 +59,8 @@ package body Gcc is
 
          Builder.Configure
            (Name, Architecture,
-            "--prefix=/" & " --with-sysroot=" &
+            "--prefix=/" & " --with-sysroot=/" & Architecture &
+            " --with-build-sysroot=" &
             Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
             " --with-native-system-header-dir=/include" & " --host=" & Host &
             " --target=" & Architecture & " --enable-lto --disable-multilib" &
@@ -73,7 +74,8 @@ package body Gcc is
 
          Builder.Configure
            (Name, Architecture,
-            "--prefix=/" & " --with-sysroot=" &
+            "--prefix=/" & " --with-sysroot=/" & Architecture &
+            " --with-build-sysroot=" &
             Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
             " --with-native-system-header-dir=/include" & " --host=" & Host &
             " --target=" & Architecture & " --with-headers=" &

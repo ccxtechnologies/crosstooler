@@ -28,11 +28,10 @@ package body Binutils is
 
       Builder.Configure
         (Name, Architecture,
-         "--prefix=/" & " --with-sysroot=" &
-         Builder.Sysroot_Directory (Gnat_Package_Name, Architecture) &
-         " --target=" & Architecture &
-         " --disable-multilib --disable-libquadmath" &
-         " --disable-libquadmath-support");
+         "--prefix=/" & " --with-sysroot=" & Architecture & " --target=" &
+         Architecture & " --disable-multilib --disable-libquadmath" &
+         " --disable-libquadmath-support" &
+         " --disable-gprofng --disable-werror");
       Builder.Build
         (Name, Architecture,
          Options =>

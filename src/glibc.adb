@@ -56,6 +56,7 @@ package body Glibc is
          " libc_cv_forced_unwind=yes");
 
       Ada.Environment_Variables.Clear ("CC");
+      Ada.Environment_Variables.Clear ("CXX");
       Ada.Environment_Variables.Clear ("LD");
       Ada.Environment_Variables.Clear ("AR");
       Ada.Environment_Variables.Clear ("RANLIB");
@@ -79,6 +80,7 @@ package body Glibc is
            (Toolchain_Directory & "/bin/" & Architecture & "-gcc " &
             "-nostdlib -nostartfiles -shared -x c /dev/null -o " &
             Destination & "/libc.so");
+
       end;
 
       File_System.Write ("stubs.h", Sysroot_Directory & "/include/gnu");
@@ -94,10 +96,12 @@ package body Glibc is
         (Name, Architecture, Options => "install_root=" & Sysroot_Directory,
          Step                        => "2");
 
-      --  update the libc.so linker definition so that the installed library
-      --  is relocatable
+      --  Update the libc.so and libm.so linker definitions so that the
+      --  installed libraries are relocatable
       Shell_Commands.Execute
         ("sed -i s;//lib/;;g " & Sysroot_Directory & "/lib/libc.so");
+      Shell_Commands.Execute
+        ("sed -i s;//lib/;;g " & Sysroot_Directory & "/lib/libm.so");
    end Build;
 
 end Glibc;
